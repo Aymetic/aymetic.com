@@ -1,0 +1,63 @@
+---
+layout: false
+---
+
+<html>
+    <head>
+        <title>我的时间</title>
+        <meta http-equiv="keywords" content="keyword1,keyword2,keyword3" />
+        <meta http-equiv="description" content="this is my page" />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <script type="text/javascript">
+            function CalTimeDiff(date) {
+                var nowDate = new Date(); //现在时间
+                var endDate = new Date(date);
+                var dateDiff = endDate.getTime() - nowDate.getTime(); //计算两时间的毫秒差并判断正负
+                var stringHead = "";
+                if (dateDiff < 0) {
+                    stringHead = "已经过去了";
+                    Math.abs(dateDiff);
+                } else stringHead = "还剩";
+                var days = Math.floor(dateDiff / (24 * 3600 * 1000)); //得到天数
+                var diff_1 = dateDiff % (24 * 3600 * 1000); //去掉天数后剩下的毫秒数
+                var hours = Math.floor(diff_1 / (3600 * 1000)); //得到小时数
+                var diff_2 = diff_1 % (3600 * 1000); //去掉小时数后剩下的毫秒数
+                var minutes = Math.floor(diff_2 / (60 * 1000)); //得到分钟数
+                var diff_3 = diff_2 % (60 * 1000); //去掉分钟数后剩下的毫秒数
+                var seconds = Math.floor(diff_3 / 1000); //得到秒数
+                document.getElementById("diffTime").innerHTML =
+                    stringHead +
+                    Math.abs(days) +
+                    "天" +
+                    Math.abs(hours) +
+                    "小时" +
+                    Math.abs(minutes) +
+                    "分" +
+                    Math.abs(seconds) +
+                    "秒";
+            }
+            var time = "2021/02/21 16:00:00";
+            var string = "见面";
+            setInterval("CalTimeDiff(time,string)", 1000);
+        </script>
+    </head>
+    <body οnlοad="time()">
+        <div class="general">
+            <font color="#C4C6C9" size="5">距离</font>
+            <b>
+                <font color="#FFA000" size="5">郑</font
+                ><font color="#BF8040" size="5">州</font
+                ><font color="#7F8080" size="5">之</font
+                ><font color="#3F80C0" size="5">旅</font>
+            </b>
+            <font color="#ef475d" size="5">
+                <b><text id="diffTime"></text></b>
+            </font>
+        </div>
+    </body>
+    <style>
+        general {
+            text-align: center;
+        }
+    </style>
+</html>
