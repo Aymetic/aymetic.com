@@ -96,6 +96,37 @@ void ConThread::work()
 }
 ```
 
-美滋滋~连点器就这么诞生了，还是比较简单的。（殊不知，后面还有更大的坑要填（录制模式））
+到此，一个最基本的鼠标连点功能就完成了。这里用到了子线程，无可避免的就要涉及到父子线程的通信问题，我这里采用的解决方案是，在主线程调用set和get函数，来修改子线程对象的值，从而完成通信。
 
-先挖坑🌌这可能是我最长的一篇博客了，慢慢来🤭。
+#### 程序热键
+
+虽然我们初步完成了鼠标的连点，但是有一个问题，如果我开始了鼠标连点，那么我就无法用鼠标去暂停或关闭连点，这时候就需要用到“热键”。
+
+同样的，Qt自带的键盘事件生效的前提是当前窗口获得焦点，而我的软件肯定要默默留在后台，好在Github平台上有开源的——[QHotkey]([Skycoder42/QHotkey: A global shortcut/hotkey for Desktop Qt-Applications (github.com)](https://github.com/Skycoder42/QHotkey))，还有一种办法就是使用Windows自带的键盘钩子，显然没有第一种开发方便，因为它也是基于Qt的~
+
+先看看QHotkey的EXample吧：
+
+```cpp
+#include <QHotkey>
+#include <QApplication>
+#include <QDebug>
+
+int main(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+
+	auto hotkey = new QHotkey(QKeySequence("ctrl+alt+Q"), true, &a);//The hotkey will be automatically registered
+	qDebug() << "Is Registered: " << hotkey->isRegistered();
+
+	QObject::connect(hotkey, &QHotkey::activated, qApp, [&](){
+		qDebug() << "Hotkey Activated - the application will quit now";
+		qApp->quit();
+	});
+
+	return a.exec();
+}
+```
+
+可以看到我们只需要创建一个QHotkey对象，传入一个QKeySequence即键盘序列对象即可，然后connect这个对象与需要响应的对象即可，非常地简单。但是呢，经过一番试用，我发现，我自定义的快捷键被程序响应后，就无法再传递给其他应用，不过也符合正常逻辑，毕竟一旦快捷键冲突，用户就会不知所措。
+
+到此QHotkey介绍完了，在我的程序中我占用了F1、F2、F3三个按键，分别启动、暂停和停止。
