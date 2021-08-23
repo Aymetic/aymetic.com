@@ -18,7 +18,7 @@ menu:
     电影: /movies/ || fas fa-video
   关于: /link/ || fas fa-heart
   导航: https://start.aymetic.com || fas fa-paper-plane
-  小玩意||fas fa-game:
+  小玩意||fas fa-gamepad:
     倒计时: /count/ || fas fa-stopwatch
   
   # 关于: /about/ || fas fa-heart
